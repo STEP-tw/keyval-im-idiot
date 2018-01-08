@@ -284,57 +284,47 @@ describe("error handling", function() {
   });
 
   it("throws error on missing value when value is unquoted", function() {
-    assert.throws(
-      () => {
-        kvParser.parse("key=")
-      },
-      errorChecker("key", 3, MissingValueError)()
-    )
+    let absolute = () => {
+      kvParser.parse("key=")
+    };
+    assert.throws(absolute, errorChecker("key", 3, MissingValueError)(absolute))
   });
 
   it("throws error on missing value when value is quoted", function() {
-    assert.throws(
-      () => {
-        kvParser.parse("key=\"value")
-      },
-      errorChecker("key", 9, MissingEndQuoteError)()
-    )
+    let absolute = () => {
+      kvParser.parse("key=\"value")
+    }
+    assert.throws(absolute, errorChecker("key", 9, MissingEndQuoteError)(absolute))
   });
 
   it("throws error on missing key", function() {
-    assert.throws(
-      () => {
-        var p = kvParser.parse("=value");
-      },
-      errorChecker(undefined, 0, MissingKeyError)()
-    )
+    let absolute = () => {
+      var p = kvParser.parse("=value");
+    };
+    assert.throws(absolute, errorChecker(undefined, 0, MissingKeyError)(absolute))
   });
 
   it("throws error on invalid key", function() {
-    assert.throws(
-      () => {
-        var p = kvParser.parse("'foo'=value");
-      },
-      errorChecker(undefined, 0, MissingKeyError)()
-    )
+    let absolute = () => {
+      var p = kvParser.parse("'foo'=value");
+    };
+    assert.throws(absolute, errorChecker(undefined, 0, MissingKeyError)(absolute))
   });
 
   it("throws error on missing assignment operator", function() {
-    assert.throws(
-      () => {
-        var p = kvParser.parse("key value");
-      },
-      errorChecker(undefined, 4, MissingAssignmentOperatorError)()
-    )
+    let absolute = () => {
+      var p = kvParser.parse("key value");
+    };
+    assert.throws(absolute,
+      errorChecker(undefined, 4, MissingAssignmentOperatorError)(absolute))
   });
 
   it("throws error on incomplete key value pair", function() {
-    assert.throws(
-      () => {
-        var p = kvParser.parse("key");
-      },
-      errorChecker(undefined, 2, IncompleteKeyValuePairError)()
-    )
+    let absolute = () => {
+      var p = kvParser.parse("key");
+    };
+    assert.throws(absolute,
+      errorChecker(undefined, 2, IncompleteKeyValuePairError)(absolute))
   });
 
 });
