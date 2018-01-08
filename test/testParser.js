@@ -32,39 +32,42 @@ describe("parse basic key values", function() {
   });
 
   it("parse when there are leading spaces before key", function() {
-    let actual = kvParser.parse(" key=value");
+    let actual = JSON.parse(JSON.stringify(kvParser.parse(" key=value")));
     let expected = {
       'key': 'value'
     };
-    assert.include(expected, actual);
+    assert.deepEqual(expected, actual);
   });
 
   it("parse when there are spaces after key", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key =value")));
     let expected = {
       key: "value"
     };
-    assert.include(expected, kvParser.parse("key =value"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse when there are spaces before and after key", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse(" key =value")));
     let expected = {
       key: "value"
     };
-    assert.include(expected, kvParser.parse(" key =value"));
+    assert.deepEqual(expected, actual);
   });
-
   it("parse when there are spaces before value", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key= value")));
     let expected = {
       key: "value"
     };
-    assert.include(expected, kvParser.parse("key= value"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse when there are spaces after value", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key=value ")));
     let expected = {
       key: "value"
     };
-    assert.include(expected, kvParser.parse("key=value "));
+    assert.deepEqual(expected, actual);
   });
 });
 
@@ -74,59 +77,67 @@ describe("parse digits and other special chars", function() {
   });
 
   it("parse keys with a single digit", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("1=value")));
     let expected = {
       '1': "value"
     };
-    assert.include(expected, kvParser.parse("1=value"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse keys with only multiple digits", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("123=value")));
     let expected = {
       '123': "value"
     };
-    assert.include(expected, kvParser.parse("123=value"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse keys with leading 0s", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("0123=value")));
     let expected = {
       '0123': "value"
     };
-    assert.include(expected, kvParser.parse("0123=value"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse keys with underscores", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("first_name=value")));
     let expected = {
       'first_name': "value"
     };
-    assert.include(expected, kvParser.parse("first_name=value"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse keys with a single underscore", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("_=value")));
     let expected = {
       '_': "value"
     };
-    assert.include(expected, kvParser.parse("_=value"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse keys with multiple underscores", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("__=value")));
     let expected = {
       '__': "value"
     };
-    assert.include(expected, kvParser.parse("__=value"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse keys with alphabets and digits(digits leading)", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("0abc=value")));
     let expected = {
       '0abc': "value"
     };
-    assert.include(expected, kvParser.parse("0abc=value"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse keys with alphabets and digits(alphabets leading)", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("a0bc=value")));
     let expected = {
       'a0bc': "value"
     };
-    assert.include(expected, kvParser.parse("a0bc=value"));
+    assert.deepEqual(expected, actual);
   });
 });
 
@@ -136,35 +147,39 @@ describe("multiple keys", function() {
   });
 
   it("parse more than one key", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key=value anotherkey=anothervalue")));
     let expected = {
       key: "value",
       anotherkey: "anothervalue"
     };
-    assert.include(expected, kvParser.parse("key=value anotherkey=anothervalue"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse more than one key when keys have leading spaces", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("   key=value anotherkey=anothervalue")));
     let expected = {
       key: "value",
       anotherkey: "anothervalue"
     };
-    assert.include(expected, kvParser.parse("   key=value anotherkey=anothervalue"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse more than one key when keys have trailing spaces", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key  =value anotherkey  =anothervalue")));
     let expected = {
       key: "value",
       anotherkey: "anothervalue"
     };
-    assert.include(expected, kvParser.parse("key  =value anotherkey  =anothervalue"));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse more than one key when keys have leading and trailing spaces", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("  key  =value anotherkey  =anothervalue")));
     let expected = {
       key: "value",
       anotherkey: "anothervalue"
     };
-    assert.include(expected, kvParser.parse("  key  =value anotherkey  =anothervalue"));
+    assert.deepEqual(expected, actual);
   });
 });
 
@@ -174,99 +189,110 @@ describe("single values with quotes", function() {
   });
 
   it("parse a single value with quotes", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key=\"value\"")));
     let expected = {
       key: "value"
     };
-    assert.include(expected, kvParser.parse("key=\"value\""));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse a single quoted value that has spaces in it", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key=\"va lue\"")));
     let expected = {
       key: "va lue"
     };
-    assert.include(expected, kvParser.parse("key=\"va lue\""));
+    assert.deepEqual(expected, actual);
   });
-
   it("parse a single quoted value that has spaces in it and leading spaces", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key=    \"va lue\"   ")));
     let expected = {
       key: "va lue"
     };
-    assert.include(expected, kvParser.parse("key=   \"va lue\""));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse a single quoted value that has spaces in it and trailing spaces", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key=\"va lue\"   ")));
     let expected = {
       key: "va lue"
     };
-    assert.include(expected, kvParser.parse("key=\"va lue\"   "));
+    assert.deepEqual(expected, actual);
   });
 });
 
 describe("multiple values with quotes", function() {
   it("parse more than one value with quotes", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key=\"va lue\" anotherkey=\"another value\"")));
     let expected = {
       key: "va lue",
       anotherkey: "another value"
     };
-    assert.include(expected, kvParser.parse("key=\"va lue\" anotherkey=\"another value\""));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse more than one value with quotes with leading spaces", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key= \"va lue\" anotherkey= \"another value\"")));
     let expected = {
       key: "va lue",
       anotherkey: "another value"
     };
-    assert.include(expected, kvParser.parse("key= \"va lue\" anotherkey= \"another value\""));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse more than one value with quotes when keys have trailing spaces", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key = \"va lue\" anotherkey = \"another value\"")));
     let expected = {
       key: "va lue",
       anotherkey: "another value"
     };
-    assert.include(expected, kvParser.parse("key = \"va lue\" anotherkey = \"another value\""));
+    assert.deepEqual(expected, actual);
   });
 });
 
 describe("mixed values with both quotes and without", function() {
   it("parse simple values with and without quotes", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key=value anotherkey=\"anothervalue\"")));
     let expected = {
       key: "value",
       anotherkey: "anothervalue"
     };
-    assert.include(expected, kvParser.parse("key=value anotherkey=\"anothervalue\""));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse simple values with and without quotes and leading spaces on keys", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("   key=value anotherkey=\"anothervalue\"")));
     let expected = {
       key: "value",
       anotherkey: "anothervalue"
     };
-    assert.include(expected, kvParser.parse("   key=value anotherkey=\"anothervalue\""));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse simple values with and without quotes and trailing spaces on keys", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("key  =value anotherkey  =\"anothervalue\"")));
     let expected = {
       key: "value",
       anotherkey: "anothervalue"
     };
-    assert.include(expected, kvParser.parse("key  =value anotherkey  =\"anothervalue\""));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse simple values with and without quotes and leading and trailing spaces on keys", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("  key  =value anotherkey  = \"anothervalue\"")));
     let expected = {
       key: "value",
       anotherkey: "anothervalue"
     };
-    assert.include(expected, kvParser.parse("  key  =value anotherkey  = \"anothervalue\""));
+    assert.deepEqual(expected, actual);
   });
 
   it("parse simple values with and without quotes(quoted values first)", function() {
+    let actual = JSON.parse(JSON.stringify(kvParser.parse("anotherkey=\"anothervalue\" key=value")));
     let expected = {
       key: "value",
       anotherkey: "anothervalue"
     };
-    assert.include(expected, kvParser.parse("anotherkey=\"anothervalue\" key=value"));
+    assert.deepEqual(expected, actual);
   });
 });
 
@@ -284,47 +310,62 @@ describe("error handling", function() {
   });
 
   it("throws error on missing value when value is unquoted", function() {
-    let absolute = () => {
-      kvParser.parse("key=")
-    };
-    assert.throws(absolute, errorChecker("key", 3, MissingValueError)(absolute))
+    assert.throws(() => {
+      try {
+        kvParser.parse("key=");
+      } catch (e) {
+        if (errorChecker("key", 3, MissingValueError)) throw e;
+      }
+    }, 'Missing value');
   });
 
   it("throws error on missing value when value is quoted", function() {
-    let absolute = () => {
-      kvParser.parse("key=\"value")
-    }
-    assert.throws(absolute, errorChecker("key", 9, MissingEndQuoteError)(absolute))
+    assert.throws(() => {
+      try {
+        kvParser.parse("key=\"value");
+      } catch (e) {
+        if (errorChecker("key", 9, MissingEndQuoteError)) throw e;
+      }
+    }, 'Missing end quote');
   });
 
   it("throws error on missing key", function() {
-    let absolute = () => {
-      var p = kvParser.parse("=value");
-    };
-    assert.throws(absolute, errorChecker(undefined, 0, MissingKeyError)(absolute))
+    assert.throws(() => {
+      try {
+        kvParser.parse("=value");
+      } catch (e) {
+        if (errorChecker(undefined, 0, MissingKeyError)) throw e;
+      }
+    }, 'Missing key');
   });
 
   it("throws error on invalid key", function() {
-    let absolute = () => {
-      var p = kvParser.parse("'foo'=value");
-    };
-    assert.throws(absolute, errorChecker(undefined, 0, MissingKeyError)(absolute))
+    assert.throws(() => {
+      try {
+        kvParser.parse("'foo'=value")
+      } catch (e) {
+        if (errorChecker(undefined, 0, MissingKeyError)) throw e;
+      }
+    }, 'Missing key');
   });
 
   it("throws error on missing assignment operator", function() {
-    let absolute = () => {
-      var p = kvParser.parse("key value");
-    };
-    assert.throws(absolute,
-      errorChecker(undefined, 4, MissingAssignmentOperatorError)(absolute))
+    assert.throws(() => {
+      try {
+        kvParser.parse("key value");
+      } catch (e) {
+        if (errorChecker(undefined, 4, MissingAssignmentOperatorError)) throw e;
+      }
+    }, 'Missing assignment operator');
   });
 
   it("throws error on incomplete key value pair", function() {
-    let absolute = () => {
-      var p = kvParser.parse("key");
-    };
-    assert.throws(absolute,
-      errorChecker(undefined, 2, IncompleteKeyValuePairError)(absolute))
+    assert.throws(() => {
+      try {
+        kvParser.parse("key");
+      } catch (e) {
+        if (errorChecker(undefined, 2, IncompleteKeyValuePairError)) throw e;
+      }
+    }, 'Missing key value pair');
   });
-
 });
