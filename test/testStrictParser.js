@@ -1,6 +1,7 @@
 const src=function(filePath){return "../src/"+filePath};
 const errors=function(filePath){return "../src/errors/"+filePath};
 
+const chaiAssert=require('chai').assert;
 const assert=require('assert');
 const StrictParser=require(src('index.js')).StrictParser;
 const InvalidKeyError=require(errors('invalidKeyError.js'));
@@ -27,7 +28,7 @@ describe("strict parser",function(){
     let kvParser=new StrictParser(["name","age"]);
     let actual=kvParser.parse("name=john age=23");
     let expected={name:"john",age:"23"};
-    assert.deepEqual(expected,actual);
+    chaiAssert.include(expected,actual);
     assert.throws(
       () => {
         var p=kvParser.parse("color=blue");
