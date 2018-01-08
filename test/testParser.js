@@ -6,7 +6,6 @@ const errors = function(filePath) {
 };
 
 const chaiAssert = require('chai').assert;
-const assert = require('assert');
 const Parser = require(src('index.js')).Parser;
 const MissingValueError = require(errors('missingValueError.js'));
 const MissingEndQuoteError = require(errors('missingEndQuoteError.js'));
@@ -285,55 +284,56 @@ describe("error handling", function() {
   });
 
   it("throws error on missing value when value is unquoted", function() {
-    assert.throws(
+    chaiAssert.throws(
       () => {
         kvParser.parse("key=")
       },
-      errorChecker("key", 3, MissingValueError))
+      errorChecker("key", 3, MissingValueError)()
+    )
   });
 
   it("throws error on missing value when value is quoted", function() {
-    assert.throws(
+    chaiAssert.throws(
       () => {
         kvParser.parse("key=\"value")
       },
-      errorChecker("key", 9, MissingEndQuoteError)
+      errorChecker("key", 9, MissingEndQuoteError)()
     )
   });
 
   it("throws error on missing key", function() {
-    assert.throws(
+    chaiAssert.throws(
       () => {
         var p = kvParser.parse("=value");
       },
-      errorChecker(undefined, 0, MissingKeyError)
+      errorChecker(undefined, 0, MissingKeyError)()
     )
   });
 
   it("throws error on invalid key", function() {
-    assert.throws(
+    chaiAssert.throws(
       () => {
         var p = kvParser.parse("'foo'=value");
       },
-      errorChecker(undefined, 0, MissingKeyError)
+      errorChecker(undefined, 0, MissingKeyError)()
     )
   });
 
   it("throws error on missing assignment operator", function() {
-    assert.throws(
+    chaiAssert.throws(
       () => {
         var p = kvParser.parse("key value");
       },
-      errorChecker(undefined, 4, MissingAssignmentOperatorError)
+      errorChecker(undefined, 4, MissingAssignmentOperatorError)()
     )
   });
 
   it("throws error on incomplete key value pair", function() {
-    assert.throws(
+    chaiAssert.throws(
       () => {
         var p = kvParser.parse("key");
       },
-      errorChecker(undefined, 2, IncompleteKeyValuePairError)
+      errorChecker(undefined, 2, IncompleteKeyValuePairError)()
     )
   });
 
