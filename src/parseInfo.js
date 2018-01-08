@@ -7,6 +7,7 @@ var ParseInfo=function(initialParsingFunction) {
     this.currentToken="";
     this.currentKey="";
     this.currentValue="";
+    this.caseSensitive=true;
     this.parsedKeys={};
     this.parseWithQuotes=false;
     this.currentPos=-1;
